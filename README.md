@@ -38,7 +38,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+* The endpoint needs to be explicitly unwrapped once passed in from AppDelegate
 
 ## License
 
