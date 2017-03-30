@@ -13,6 +13,7 @@ import MBProgressHUD
 class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var errorView: UIView!
     
     var movies: [NSDictionary]?
     var endpoint: String!
@@ -45,6 +46,7 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                 
                 print("\(error)")
                 MBProgressHUD.hide(for: self.view, animated: true)
+                self.errorView.isHidden = false
                 
             } else if let data = dataOrNil {
         
