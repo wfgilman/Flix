@@ -104,6 +104,13 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         return cell
     }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        filteredMovies = searchText.isEmpty ? movies : movies?.filter {
+            String(describing: $0["title"]).range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
+        }
+        tableView.reloadData()
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
