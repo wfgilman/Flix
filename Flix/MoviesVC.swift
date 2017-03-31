@@ -53,6 +53,7 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
                 
                 print("\(error)")
                 MBProgressHUD.hide(for: self.view, animated: true)
+                self.errorView.backgroundColor = UIColor.clear
                 self.errorView.isHidden = false
                 
             } else if let data = dataOrNil {
@@ -106,14 +107,14 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
                 placeholderImage: nil,
                 success: { (posterRequest, posterResponse, poster) -> Void in
                     if posterResponse != nil {
-                        print("Image was NOT cached, fade in image")
+                        // print("Image was NOT cached, fade in image")
                         cell.posterView.alpha = 0.0
                         cell.posterView.image = poster
                         UIView.animate(withDuration: 0.3, animations: { () -> Void in
                             cell.posterView.alpha = 1.0
                         })
                     } else {
-                        print("Image was cached so just update image")
+                        // print("Image was cached so just update image")
                         cell.posterView.image = poster
                     }
             },
@@ -166,7 +167,7 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         let task : URLSessionDataTask = session.dataTask(with: request,completionHandler: { (dataOrNil, response, error) in
             if let data = dataOrNil {
                 if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
-                    NSLog("response: \(responseDictionary)")
+                    // NSLog("response: \(responseDictionary)")
                     
                     self.movies = responseDictionary["results"] as? [NSDictionary]
                     self.filteredMovies = self.movies
