@@ -97,8 +97,27 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         
         let baseUrl = "https://image.tmdb.org/t/p/w500"
         if let posterPath = movie["poster_path"] as? String {
-            let posterUrl = NSURL(string: baseUrl + posterPath)
-            cell.posterView.setImageWith(posterUrl as! URL)
+            let posterUrl = NSURL(string: baseUrl + posterPath) as! URL
+            let posterRequest = NSURLRequest(url: posterUrl)
+            cell.posterView.setImageWith(
+                posterRequest as URLRequest,
+                placeholderImage: nil,
+                success: { (posterRequest, posterResponse, poster) -> Void in
+                    if posterResponse != nil {
+                        print("Image was NOT cached, fade in image")
+                        cell.posterView.alpha = 0.0
+                        cell.posterView.image = poster
+                        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+                            cell.posterView.alpha = 1.0
+                        })
+                    } else {
+                        print("Image was cached so just update image")
+                        cell.posterView.image = poster
+                    }
+            },
+                failure: { (posterRequest, posterResponse, error) -> Void in
+                    print(error)
+            })
         }
         
         return cell
