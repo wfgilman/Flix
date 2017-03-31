@@ -87,6 +87,8 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
+        cell.accessoryType = .disclosureIndicator
+        
         let movie = filteredMovies![indexPath.row]
         
         let title = movie["title"] as! String
@@ -129,6 +131,16 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
             String(describing: $0["title"]).range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
         }
         tableView.reloadData()
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

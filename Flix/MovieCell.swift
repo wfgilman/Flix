@@ -18,11 +18,20 @@ class MovieCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        let color: UIColor = highlighted ? .black : .darkGray
+        let size: CGFloat = highlighted ? 21.0 : 19.0
+        self.titleLabel.font = self.titleLabel.font.withSize(size)
+        self.titleLabel.textColor = color
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
+        // These effect don't look good for this app.
     }
 
 }
