@@ -10,19 +10,26 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var errorView: UIView!
     
     var movies: [NSDictionary]?
+    var filteredMovies: [NSDictionary]?
     var endpoint: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.dataSource = self
         tableView.delegate = self
+        
+        let searchBar = UISearchBar()
+        searchBar.showsCancelButton = false
+        searchBar.placeholder = "Find Movies"
+        searchBar.delegate = self
+        self.navigationItem.titleView = searchBar
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
@@ -53,9 +60,10 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 
                 if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
-                    NSLog("response: \(responseDictionary)")
+                    // NSLog("response: \(responseDictionary)")
                     
                     self.movies = responseDictionary["results"] as? [NSDictionary]
+                    self.filteredMovies = self.movies
                     self.tableView.reloadData()
                 }
             }
@@ -69,8 +77,8 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let movies = movies {
-            return movies.count
+        if let filteredMovies = filteredMovies {
+            return filteredMovies.count
         } else {
             return 0
         }
@@ -79,7 +87,7 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
-        let movie = movies![indexPath.row]
+        let movie = filteredMovies![indexPath.row]
         
         let title = movie["title"] as! String
         cell.titleLabel.text = title
@@ -95,6 +103,7 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         return cell
     }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
@@ -122,6 +131,7 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                     NSLog("response: \(responseDictionary)")
                     
                     self.movies = responseDictionary["results"] as? [NSDictionary]
+                    self.filteredMovies = self.movies
                     self.tableView.reloadData()
                     refreshControl.endRefreshing()
                 }
