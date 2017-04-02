@@ -33,7 +33,6 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         self.navigationItem.titleView = searchBar
         
         if let navigationBar = navigationController?.navigationBar {
-            print("called")
             navigationBar.backgroundColor = navBarColor
         }
         
@@ -65,6 +64,7 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
             } else if let data = dataOrNil {
         
                 MBProgressHUD.hide(for: self.view, animated: true)
+                self.errorView.isHidden = true
                 
                 if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
                     // NSLog("response: \(responseDictionary)")
@@ -146,14 +146,15 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
-        searchBar.text = ""
+        searchBar.text = nil
         searchBar.resignFirstResponder()
+        tableView.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
         let indexPath = tableView.indexPath(for: cell)
-        let movie = movies![indexPath!.row]
+        let movie = filteredMovies![indexPath!.row]
         
         let detailVC = segue.destination as! DetailVC
         detailVC.movie = movie
@@ -173,8 +174,7 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         let task : URLSessionDataTask = session.dataTask(with: request,completionHandler: { (dataOrNil, response, error) in
             if let data = dataOrNil {
                 if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
-                    // NSLog("response: \(responseDictionary)")
-                    
+                    self.errorView.isHidden = true
                     self.movies = responseDictionary["results"] as? [NSDictionary]
                     self.filteredMovies = self.movies
                     self.tableView.reloadData()
