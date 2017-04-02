@@ -38,7 +38,10 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-* The endpoint needs to be explicitly unwrapped once passed in from AppDelegate
+* The `endpoint` needs to be explicitly unwrapped once passed in from AppDelegate
+* There's a great opportunity to refactor the initial load and `refreshControllAction`
+except that `refreshControl.endRefreshing` is embedded in the task declaration, so I'm
+not sure how I would go about doing that.
 
 ## License
 
