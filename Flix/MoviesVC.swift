@@ -18,6 +18,7 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     var movies: [NSDictionary]?
     var filteredMovies: [NSDictionary]?
     var endpoint: String!
+    var navBarColor: UIColor!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,11 @@ class MoviesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         searchBar.placeholder = "Find Movies"
         searchBar.delegate = self
         self.navigationItem.titleView = searchBar
+        
+        if let navigationBar = navigationController?.navigationBar {
+            print("called")
+            navigationBar.backgroundColor = navBarColor
+        }
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)

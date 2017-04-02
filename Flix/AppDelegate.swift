@@ -22,12 +22,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let nowPlayingNavigationController = storyboard.instantiateViewController(withIdentifier: "MoviesNC") as! UINavigationController
         let nowPlayingViewController = nowPlayingNavigationController.topViewController as! MoviesVC
         nowPlayingViewController.endpoint = "now_playing"
+        nowPlayingViewController.navBarColor = UIColor(red: 128.0 / 255.0, green: 0.0, blue: 64 / 255.0, alpha: 1.0)
         nowPlayingNavigationController.tabBarItem.title = "Now Playing"
         nowPlayingNavigationController.tabBarItem.image = UIImage(named: "now_playing")
    
         let topRatedNavigationController = storyboard.instantiateViewController(withIdentifier: "MoviesNC") as! UINavigationController
         let topRatedViewController = topRatedNavigationController.topViewController as! MoviesVC
         topRatedViewController.endpoint = "top_rated"
+        topRatedViewController.navBarColor = UIColor(red: 1.0, green: 184.0 / 255.0, blue: 43.0 / 255.0, alpha: 1.0)
         topRatedNavigationController.tabBarItem.title = "Top Rated"
         topRatedNavigationController.tabBarItem.image = UIImage(named: "top_rated")
         
